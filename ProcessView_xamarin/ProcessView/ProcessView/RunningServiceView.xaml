@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:ProcessView"
+             x:Class="ProcessView.RunningServiceView"
+             BackgroundColor="#1B2836">
+
+    <Grid>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <StackLayout Padding="0">
+            </StackLayout>
+        </Grid>
+
+        <Grid Grid.Row="1" Padding="5, 5, 5, 5">
+            <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Spacing="0">
+                <ListView x:Name="ProcessListview" Refreshing="ProcessListview_Refreshing" HasUnevenRows="true" SeparatorVisibility="None" ItemsSource="{Binding ProcessSource}" >
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <views:SelectedViewCell>
+                                <StackLayout  Orientation="Horizontal" HorizontalOptions="StartAndExpand" VerticalOptions="Center">
+                                    <Image Source= "{Binding PackageIcon}" Aspect="AspectFit"   HeightRequest="30" WidthRequest="30" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
+                                    <Label Text="{Binding PackageLabel}" TextColor="White" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
+                                    <Label Text="{Binding PackageName}" IsVisible="False" TextColor="AntiqueWhite" HorizontalOptions="StartAndExpand" VerticalOptions="Center"/>
+                                </StackLayout>
+                            </views:SelectedViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+        </Grid>
+
+    </Grid>
+
+</ContentView>

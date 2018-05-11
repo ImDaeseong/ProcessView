@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:ProcessView"
+             x:Class="ProcessView.MainPage"
+             BackgroundColor="#1B2836">
+    
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness" iOS="0, 20, 0, 0" />
+    </ContentPage.Padding>
+    
+    <ContentPage.Content>
+
+        <Grid RowSpacing="0" ColumnSpacing="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>                
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="1" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+
+            <Grid Grid.Row="0" RowSpacing="0" ColumnSpacing="0" BackgroundColor="#243447">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <StackLayout x:Name="sl1" Orientation="Vertical" VerticalOptions="End" Grid.Column="0" Grid.Row="0">
+                    <Image x:Name="tabImg1" Source="search.png" />
+                    <Label x:Name="tab1" Text="실행중인 앱" TextColor="#8899A6" FontSize="11" HorizontalTextAlignment="Center" />
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizerRun_Tapped" />
+                    </StackLayout.GestureRecognizers>
+                </StackLayout>
+                
+                <StackLayout x:Name="sl2"  Orientation="Vertical" VerticalOptions="End" Grid.Column="1" Grid.Row="0" >
+                    <Image x:Name="tabImg2" Source="search.png" />
+                    <Label x:Name="tab2" Text="실행중인 서비스" TextColor="#8899A6" FontSize="11" HorizontalTextAlignment="Center" />
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizerService_Tapped" />
+                    </StackLayout.GestureRecognizers>
+                </StackLayout>
+
+                <StackLayout x:Name="sl3" Orientation="Vertical" VerticalOptions="End" Grid.Column="2" Grid.Row="0">
+                    <Image x:Name="tabImg3" Source="search.png" />
+                    <Label x:Name="tab3" Text="전체 설치앱" TextColor="#8899A6" FontSize="11" HorizontalTextAlignment="Center" />
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizerAll_Tapped" />
+                    </StackLayout.GestureRecognizers>
+                </StackLayout>          
+            </Grid>
+
+            <BoxView x:Name="boxline" Grid.Row="1" HeightRequest="0.1" Color="#6E808F" />
+                    
+            <ContentView x:Name="ChangeContent" Grid.Row="2"  >
+                <views:RunningTopView />
+            </ContentView>
+
+        </Grid>
+                
+                
+    </ContentPage.Content>
+</ContentPage>

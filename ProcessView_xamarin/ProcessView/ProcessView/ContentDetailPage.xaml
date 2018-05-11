@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              xmlns:renderers ="clr-namespace:ProcessView.Renderers"
+             x:Class="ProcessView.ContentDetailPage"
+             BackgroundColor="#1B2836">
+
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness" iOS="0, 20, 0, 0" />
+    </ContentPage.Padding>
+    
+    <ContentPage.Content>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+
+            <Grid Grid.Row="0">
+                <Grid Margin="5,5,5,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Image Grid.Column="0" x:Name="PackageIcon" Aspect="AspectFit"   HeightRequest="40" WidthRequest="40" HorizontalOptions="Start" VerticalOptions="Center"/>
+
+                    <StackLayout Grid.Column="1">
+                        <Label x:Name="PackageLabel" TextColor="White" HorizontalOptions="Start" VerticalOptions="Center"/>
+                        <Label x:Name="PackageVersion" TextColor="AntiqueWhite" HorizontalOptions="Start" VerticalOptions="Center"/>
+                    </StackLayout>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <StackLayout Orientation ="Horizontal" Margin="10,5,10,5">
+                    <renderers:TextButton Text="강제종료" TextColor="#1B2836" HeightRequest="30" HorizontalOptions="FillAndExpand" Clicked="Kill_Clicked" />
+                    <renderers:TextButton Text="제거" TextColor="#1B2836" HeightRequest="30" HorizontalOptions="FillAndExpand"  Clicked="Remove_Clicked" />
+                </StackLayout>
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <StackLayout Margin="5,5,5,5">
+                    <TableView Intent="Menu" Margin="0,0" RowHeight="50">
+                        <TableRoot>
+                            <TableSection>
+
+                                <ViewCell>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label x:Name="lblPackageName" VerticalOptions="Center" FontSize="12" TextColor="White"></Label>
+                                    </StackLayout>
+                                </ViewCell>
+
+                                <ViewCell>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label  x:Name="lblInstallTime" VerticalOptions="Center" FontSize="12" TextColor="White"></Label>
+                                    </StackLayout>
+                                </ViewCell>
+
+                                <ViewCell>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label x:Name="lblUpdateTime" VerticalOptions="Center" FontSize="12" TextColor="White"></Label>
+                                    </StackLayout>
+                                </ViewCell>
+                                
+                                <ViewCell>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label x:Name="lblApkFilePath" VerticalOptions="Center" FontSize="12" TextColor="White"></Label>
+                                    </StackLayout>
+                                </ViewCell>
+
+                                <ViewCell>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label x:Name="lblFilesize" VerticalOptions="Center" FontSize="12" TextColor="White"></Label>
+                                    </StackLayout>
+                                </ViewCell>
+
+                                <ViewCell>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label x:Name="lblPermissionInfo" VerticalOptions="Center" FontSize="12" TextColor="White"></Label>
+                                    </StackLayout>
+                                </ViewCell>
+
+                                <ViewCell>
+                                    <StackLayout Orientation="Horizontal" Margin="5,0,5,0">
+                                        <Label x:Name="lblCacheInfo" VerticalOptions="Center" HorizontalOptions="Start" FontSize="12" TextColor="White"></Label>
+                                        <renderers:TextButton Text="임시파일 삭제" TextColor="#1B2836" VerticalOptions="Center" HorizontalOptions="EndAndExpand" HeightRequest="30" Clicked="CacheDel_Clicked" />
+                                    </StackLayout>
+                                </ViewCell>
+
+                            </TableSection>
+                        </TableRoot>
+                    </TableView>
+                </StackLayout>
+            </Grid>
+
+            <Grid Grid.Row="3">
+                <StackLayout Orientation ="Horizontal" Margin="10,5,10,5">
+                    <renderers:TextButton Text="실행" TextColor="#1B2836" HeightRequest="30" HorizontalOptions="FillAndExpand" Clicked="Run_Clicked" />
+                    <renderers:TextButton Text="복사(Apk)" TextColor="#1B2836" HeightRequest="30" HorizontalOptions="FillAndExpand" Clicked="Copy_Clicked"/>
+                </StackLayout>
+            </Grid>
+
+        </Grid>
+
+    </ContentPage.Content>
+</ContentPage>
