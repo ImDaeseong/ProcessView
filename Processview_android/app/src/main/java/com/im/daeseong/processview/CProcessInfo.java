@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -23,132 +22,104 @@ import java.util.List;
 
 public class CProcessInfo {
 
-
     //실행중인 서비스 목록
-    public static List<String> GetRunningServicesName(Context context)
-    {
-        try
-        {
-            List<String> ServiceInfo = new ArrayList<>();
-            ActivityManager activityManager  = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
+    public static List<String> getRunningServicesName(Context context) {
+        try {
+            List<String> serviceInfo = new ArrayList<>();
+            ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 
-            for (ActivityManager.RunningServiceInfo  srvInfo :  activityManager.getRunningServices(Short.MAX_VALUE))
-            {
-                if (srvInfo.service.getPackageName().equals("com.im.daeseong.processview") ){
-                    continue;
+            for (ActivityManager.RunningServiceInfo srvInfo : activityManager.getRunningServices(Integer.MAX_VALUE)) {
+                if (!srvInfo.service.getPackageName().equals("com.im.daeseong.processview")) {
+                    serviceInfo.add(srvInfo.service.getPackageName());
                 }
-
-                ServiceInfo.add(srvInfo.service.getPackageName());
             }
-            return ServiceInfo;
-
-        } catch(Exception e) {
+            return serviceInfo;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
         return null;
     }
 
     //최상위 액티비티
-    public static List<String> GetRunningTopPackageName(Context context)
-    {
-        try
-        {
-            List<String> TopPackageInfo = new ArrayList<>();
-            ActivityManager activityManager  = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
+    public static List<String> getRunningTopPackageName(Context context) {
+        try {
+            List<String> topPackageInfo = new ArrayList<>();
+            ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 
-            for (ActivityManager.RunningTaskInfo ActivityInfo : activityManager.getRunningTasks(Short.MAX_VALUE))
-            {
-                if (ActivityInfo.topActivity.getPackageName().equals("com.im.daeseong.processview") ){
-                    continue;
+            for (ActivityManager.RunningTaskInfo activityInfo : activityManager.getRunningTasks(Integer.MAX_VALUE)) {
+                if (!activityInfo.topActivity.getPackageName().equals("com.im.daeseong.processview")) {
+                    topPackageInfo.add(activityInfo.topActivity.getPackageName());
                 }
-
-                TopPackageInfo.add(ActivityInfo.topActivity.getPackageName());
             }
-            return TopPackageInfo;
+            return topPackageInfo;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        catch(Exception e) {
-        }
-
         return null;
     }
 
     //최근 실행한 Task 목록
-    public static List<String> GetCurrentTaskPackageName(Context context)
-    {
-        try
-        {
-            List<String> CurrentPackageInfo = new ArrayList<>();
-            ActivityManager activityManager  = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
+    public static List<String> getCurrentTaskPackageName(Context context) {
+        try {
+            List<String> currentPackageInfo = new ArrayList<>();
+            ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 
-            for (ActivityManager.RecentTaskInfo AppInfo : activityManager.getRecentTasks(Short.MAX_VALUE, ActivityManager.RECENT_IGNORE_UNAVAILABLE | ActivityManager.RECENT_WITH_EXCLUDED) )
-            {
-                if (AppInfo.baseIntent.getComponent().getPackageName().equals("com.im.daeseong.processview") ){
-                    continue;
+            for (ActivityManager.RecentTaskInfo appInfo : activityManager.getRecentTasks(Integer.MAX_VALUE, ActivityManager.RECENT_IGNORE_UNAVAILABLE | ActivityManager.RECENT_WITH_EXCLUDED)) {
+                if (!appInfo.baseIntent.getComponent().getPackageName().equals("com.im.daeseong.processview")) {
+                    currentPackageInfo.add(appInfo.baseIntent.getComponent().getPackageName());
                 }
-
-                CurrentPackageInfo.add(AppInfo.baseIntent.getComponent().getPackageName());
             }
-            return CurrentPackageInfo;
-
-        } catch (Exception e){
+            return currentPackageInfo;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
         return null;
     }
 
     //전체앱 목록
-    public static List<String> GetAllPackageNames(Context context)
-    {
-        try
-        {
-            List<String> AllPackageInfo = new ArrayList<>();
+    public static List<String> getAllPackageNames(Context context) {
+        try {
+            List<String> allPackageInfo = new ArrayList<>();
             PackageManager packageManager = context.getPackageManager();
 
-            for(ApplicationInfo applicationInfo : packageManager.getInstalledApplications(PackageManager.GET_META_DATA)){
-
-                if(applicationInfo.packageName.equals("com.im.daeseong.processview") ){
-                    continue;
+            for (ApplicationInfo applicationInfo : packageManager.getInstalledApplications(PackageManager.GET_META_DATA)) {
+                if (!applicationInfo.packageName.equals("com.im.daeseong.processview")) {
+                    allPackageInfo.add(applicationInfo.packageName);
                 }
-
-                AllPackageInfo.add(applicationInfo.packageName);
             }
-            return AllPackageInfo;
-
-        }
-        catch(Exception e) {
+            return allPackageInfo;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
 
-    public static  boolean CopyApk(Context context, String sPackageName)
-    {
-        try
-        {
+    public static boolean copyApk(Context context, String sPackageName) {
+        try {
             PackageManager packageManager = context.getPackageManager();
-
             PackageInfo pkgInfo = packageManager.getPackageInfo(sPackageName, 0);
 
             String sPublicSourceDir = pkgInfo.applicationInfo.publicSourceDir;
-            String sFileName = String.format("%s.apk", sPackageName);// GetFileName(sPublicSourceDir);
+            String sFileName = String.format("%s.apk", sPackageName);
 
-            String sPath = String.format("%s/apkList", Environment.getExternalStorageDirectory().getAbsolutePath() );
-            if (!DirectoryExists(sPath)) CreateDirectory(sPath);
+            String sPath = String.format("%s/apkList", Environment.getExternalStorageDirectory().getAbsolutePath());
+            if (!directoryExists(sPath)) {
+                createDirectory(sPath);
+            }
 
-            String fullFilename = sPath = String.format("%s/%s", sPath, sFileName);
-            CopyFile(sPublicSourceDir, fullFilename);
+            String fullFilename = String.format("%s/%s", sPath, sFileName);
+            copyFile(sPublicSourceDir, fullFilename);
 
             return true;
-
-        } catch (PackageManager.NameNotFoundException e){
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
         return false;
     }
 
-    public static boolean KillApp(Context context, String sPackageName)
-    {
-        try
-        {
-            ActivityManager activityManager  = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
+    public static boolean killApp(Context context, String sPackageName) {
+        try {
+            ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
             activityManager.killBackgroundProcesses(sPackageName);
 
             PackageManager packageManager = context.getPackageManager();
@@ -156,177 +127,154 @@ public class CProcessInfo {
             android.os.Process.sendSignal(applicationInfo.uid, android.os.Process.SIGNAL_KILL);
 
             return true;
-        } catch(Exception e) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return false;
     }
 
-    public static boolean Install(Context context, String sAppPath)
-    {
-        //var appPath = Path.Combine(Android.OS.Environment.ExternalStorageDirectory + "/download/", sApkFilename);
-        try
-        {
+    public static boolean install(Context context, String sAppPath) {
+        try {
             File file = new File(sAppPath);
-            if(file.exists()) {
+            if (file.exists()) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
             return true;
-
-        } catch (Exception e){
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return false;
     }
 
-    public static boolean UnInstall(Context context, String sPackageName)
-    {
-        try
-        {
+    public static boolean uninstall(Context context, String sPackageName) {
+        try {
             Intent intent = new Intent(Intent.ACTION_DELETE);
             Uri packageURI = Uri.parse("package:" + sPackageName);
             intent.setData(packageURI);
             context.startActivity(intent);
             return true;
-
-        } catch (Exception e){
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return false;
     }
 
-    public static boolean StartApp(Context context, String sPackageName)
-    {
-        try
-        {
+    public static boolean startApp(Context context, String sPackageName) {
+        try {
             PackageManager packageManager = context.getPackageManager();
             Intent intent = packageManager.getLaunchIntentForPackage(sPackageName);
-            if (intent != null)
+            if (intent != null) {
                 context.startActivity(intent);
+            }
             return true;
-
-        }catch (Exception e){
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return false;
     }
 
-    public static String GetPackageLabel(Context context, String sPackageName)
-    {
-        try
-        {
+    public static String getPackageLabel(Context context, String sPackageName) {
+        try {
             PackageManager packageManager = context.getPackageManager();
             ApplicationInfo applicationInfo = packageManager.getApplicationInfo(sPackageName, PackageManager.GET_META_DATA);
-
-            String sLabel = applicationInfo.loadLabel(packageManager).toString();
-            return sLabel;
-
-        }catch (Exception e){
+            return applicationInfo.loadLabel(packageManager).toString();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return "";
     }
 
-    public static Drawable GetPackageIcon(Context context, String sPackageName)
-    {
-        try
-        {
+    public static Drawable getPackageIcon(Context context, String sPackageName) {
+        try {
             PackageManager packageManager = context.getPackageManager();
             ApplicationInfo applicationInfo = packageManager.getApplicationInfo(sPackageName, PackageManager.GET_META_DATA);
-
-            Drawable icon = applicationInfo.loadIcon(packageManager);
-            return icon;
-
-        }catch (Exception e){
+            return applicationInfo.loadIcon(packageManager);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
 
-    public static PackageItem GetPackageInfo(Context context, String sPackageName)
-    {
-        try
-        {
+    public static PackageItem getPackageInfo(Context context, String sPackageName) {
+        try {
             PackageManager packageManager = context.getPackageManager();
-
             PackageInfo pkgInfo = packageManager.getPackageInfo(sPackageName, 0);
             if (pkgInfo == null) return null;
 
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date First = new Date(pkgInfo.firstInstallTime);
-            Date Last = new Date(pkgInfo.lastUpdateTime);
-            String sInstallTime = format.format(First);
-            String sUpdateTime = format.format(Last);
+            Date first = new Date(pkgInfo.firstInstallTime);
+            Date last = new Date(pkgInfo.lastUpdateTime);
+            String sInstallTime = format.format(first);
+            String sUpdateTime = format.format(last);
 
             String sPermission = pkgInfo.applicationInfo.permission;
             String sPublicSourceDir = pkgInfo.applicationInfo.publicSourceDir;
-            String sFilesize = GetFileSize(sPublicSourceDir);
+            String sFilesize = getFileSize(sPublicSourceDir);
 
-            PackageItem item = new PackageItem(pkgInfo.packageName, sInstallTime, sUpdateTime, pkgInfo.versionName, sFilesize, sPermission, sPublicSourceDir);
-            return item;
-
-        }catch (Exception e){
+            return new PackageItem(sPackageName, sInstallTime, sUpdateTime, pkgInfo.versionName, sFilesize, sPermission, sPublicSourceDir);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
 
-    public static String GetPackageCache(String sPackageName, boolean bClear)// = false)
-    {
+    public static String getPackageCache(String sPackageName, boolean bClear) {
         String sAbsolutePath = Environment.getExternalStorageDirectory().getAbsolutePath();
         String sPath = String.format("%s/Android/data/%s/cache", sAbsolutePath, sPackageName);
 
-        //cache file clear
-        if (bClear) ClearCacheFiles(sPath);
+        // Clear cache files
+        if (bClear) {
+            clearCacheFiles(sPath);
+        }
 
-        return GetCacheFileSize(sPath);
+        return getCacheFileSize(sPath);
     }
 
-    private static  void ClearCacheFiles(String sPath)
-    {
-        try
-        {
+    private static void clearCacheFiles(String sPath) {
+        try {
             File directory = new File(sPath);
-            if(directory.isDirectory()){
-
+            if (directory.isDirectory()) {
                 File[] files = directory.listFiles();
-                for (File f : files){
-                    f.delete();
+                if (files != null) {
+                    for (File f : files) {
+                        f.delete();
+                    }
                 }
             }
-
-        }catch (Exception e){
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    private static String GetCacheFileSize(String sPath)
-    {
-        try
-        {
-            String sFilesize = "";
+    private static String getCacheFileSize(String sPath) {
+        try {
             long lFileSize = 0;
             File directory = new File(sPath);
-            if(directory.isDirectory()){
-
+            if (directory.isDirectory()) {
                 File[] files = directory.listFiles();
-                for (File f : files){
-                    lFileSize += f.length();
+                if (files != null) {
+                    for (File f : files) {
+                        lFileSize += f.length();
+                    }
                 }
             }
-            sFilesize = byte2FitMemorySize(lFileSize);
-            return sFilesize;
-
-        }catch (Exception e){
+            return byte2FitMemorySize(lFileSize);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return "0kb";
     }
 
-    private static String GetFileSize(String sPath)
-    {
-        try
-        {
+    private static String getFileSize(String sPath) {
+        try {
             File file = new File(sPath);
             long len = file.length();
-            String sFilesize = byte2FitMemorySize(len);
-            return sFilesize;
-
-        }catch (Exception e){
+            return byte2FitMemorySize(len);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return "";
     }
@@ -346,22 +294,19 @@ public class CProcessInfo {
         }
     }
 
-    private static void CreateDirectory(String directoryPath)
-    {
+    private static void createDirectory(String directoryPath) {
         File file = new File(directoryPath);
-        if(!file.exists()){
+        if (!file.exists()) {
             file.mkdirs();
         }
     }
 
-    private static boolean DirectoryExists(String directoryPath)
-    {
+    private static boolean directoryExists(String directoryPath) {
         File file = new File(directoryPath);
-        return  file.isDirectory();
+        return file.isDirectory();
     }
 
-    private static void CopyFile(String sourcePath, String destinationPath)
-    {
+    private static void copyFile(String sourcePath, String destinationPath) {
         FileChannel inChannel = null;
         FileChannel outChannel = null;
         try {
@@ -371,8 +316,8 @@ public class CProcessInfo {
             inChannel = new FileInputStream(sFile).getChannel();
             outChannel = new FileOutputStream(dFile).getChannel();
             inChannel.transferTo(0, inChannel.size(), outChannel);
-
         } catch (IOException e) {
+            e.printStackTrace();
         } finally {
             try {
                 if (inChannel != null) {
@@ -381,22 +326,21 @@ public class CProcessInfo {
                 if (outChannel != null) {
                     outChannel.close();
                 }
-            }catch (IOException e){
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
 
-    private static void DeleteFile(String filePath)
-    {
+    private static void deleteFile(String filePath) {
         File file = new File(filePath);
-        if(file.exists()){
+        if (file.exists()) {
             file.delete();
         }
     }
 
-    private static  boolean FileExists(String filePath)
-    {
+    private static boolean fileExists(String filePath) {
         File file = new File(filePath);
-        return  file.exists();
+        return file.exists();
     }
 }

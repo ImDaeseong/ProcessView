@@ -1,39 +1,37 @@
 package com.im.daeseong.processview;
 
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;//import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        List<String> runService = CProcessInfo.GetRunningServicesName(MainActivity.this);
-        for(int i=0; i < runService.size(); i++){
-            //Log.e("tag", "runService:"+ runService.get(i) );
+        List<String> runService = CProcessInfo.getRunningServicesName(MainActivity.this);
+        for (String packageName : runService) {
+            Log.e(TAG, "runService:" + packageName);
         }
 
-        List<String> runTop = CProcessInfo.GetRunningTopPackageName(MainActivity.this);
-        for(int i=0; i < runTop.size(); i++){
-            //Log.e("tag", "runTop:"+ runTop.get(i) );
+        List<String> runTop = CProcessInfo.getRunningTopPackageName(MainActivity.this);
+        for (String packageName : runTop) {
+            Log.e(TAG, "runTop:" + packageName);
         }
 
-        List<String> CurrentTask = CProcessInfo.GetCurrentTaskPackageName(MainActivity.this);
-        for(int i=0; i < CurrentTask.size(); i++){
-            //Log.e("tag", "CurrentTask:"+ CurrentTask.get(i) );
+        List<String> currentTask = CProcessInfo.getCurrentTaskPackageName(MainActivity.this);
+        for (String packageName : currentTask) {
+            Log.e(TAG, "CurrentTask:" + packageName);
         }
 
-        List<String> allPackage = CProcessInfo.GetAllPackageNames(MainActivity.this);
-        for(int i=0; i < allPackage.size(); i++){
-            //Log.e("tag", "allPackage:"+ allPackage.get(i) );
+        List<String> allPackage = CProcessInfo.getAllPackageNames(MainActivity.this);
+        for (String packageName : allPackage) {
+            Log.e(TAG, "allPackage:" + packageName);
         }
-
     }
 }

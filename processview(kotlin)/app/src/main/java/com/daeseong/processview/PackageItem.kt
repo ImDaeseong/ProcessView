@@ -7,5 +7,5 @@ class PackageItem(
     var VersionName: String,
     var Filesize: String,
     var PermissionInfo: String,
-    var ApkFilePath: String
-)
+    var ApkFilePath: String) {
+}

@@ -1,23 +1,21 @@
 package com.im.daeseong.processview;
 
-public class PackageItem
-{
-    public String InstallTime;
-    public String UpdateTime;
-    public String VersionName;
-    public String Filesize;
-    public String PermissionInfo;
-    public String ApkFilePath;
-    public String PackageName;
+public class PackageItem {
+    public String packageName;
+    public String installTime;
+    public String updateTime;
+    public String versionName;
+    public String filesize;
+    public String permissionInfo;
+    public String apkFilePath;
 
-    public PackageItem(String PackageName , String InstallTime, String UpdateTime, String VersionName, String Filesize, String PermissionInfo, String ApkFilePath)
-    {
-        this.PackageName = PackageName;
-        this.InstallTime = InstallTime;
-        this.UpdateTime = UpdateTime;
-        this.VersionName = VersionName;
-        this.Filesize = Filesize;
-        this.PermissionInfo = PermissionInfo;
-        this.ApkFilePath = ApkFilePath;
+    public PackageItem(String packageName, String installTime, String updateTime, String versionName, String filesize, String permissionInfo, String apkFilePath) {
+        this.packageName = packageName;
+        this.installTime = installTime;
+        this.updateTime = updateTime;
+        this.versionName = versionName;
+        this.filesize = filesize;
+        this.permissionInfo = permissionInfo;
+        this.apkFilePath = apkFilePath;
     }
 }
